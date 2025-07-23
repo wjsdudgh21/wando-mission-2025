@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 완도선교 팀별 인포그래픽</title>
+    <style>
+        /* 기본 스타일 초기화 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            min-height: calc(100vh - 20px);
+        }
+        
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '⛪';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 1.5em;
+        }
+        
+        .header::after {
+            content: '🏝️';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        /* 네비게이션 버튼 */
+        .navigation {
+            background: #f8f9fa;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .nav-button.active {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(33,150,243,0.4);
+        }
+        
+        /* 페이지 컨텐츠 */
+        .page {
+            display: none;
+            padding: 15px;
+            min-height: 400px;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2196F3;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        /* 검색창 */
+        .search-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .search-label {
+            font-weight: bold;
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.9em;
+            outline: none;
+            transition: border-color 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .search-input:focus {
+            border-color: #2196F3;
+        }
+        
+        .search-button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(33,150,243,0.3);
+        }
+        
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33,150,243,0.4);
+        }
+        
+        /* 검색 하이라이트 */
+        .highlight {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%) !important;
+            color: white !important;
+            font-size: 1.1em !important;
+            font-weight: bold !important;
+            animation: blink 2s infinite;
+            transform: scale(1.1) !important;
+            border: 3px solid #ff6b6b !important;
+            border-radius: 5px;
+            padding: 2px 4px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            25%, 75% { opacity: 0.7; }
+        }
+        
+        .no-result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* 요약 정보 */
+        .summary {
+            background: #f8f9fa;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .summary-item {
+            margin: 5px 15px;
+            text-align: center;
+        }
+        
+        .summary-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        
+        .summary-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        /* 팀 카드 */
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        
+        .team-card.beauty { border-top-color: #e91e63; }
+        .team-card.mural { border-top-color: #ff9800; }
+        .team-card.facility { border-top-color: #4caf50; }
+        .team-card.evangelism { border-top-color: #9c27b0; }
+        .team-card.kitchen { border-top-color: #f44336; }
+        .team-card.management { border-top-color: #2196f3; }
+        
+        .team-header {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.02) 100%);
+            border-bottom: 1px solid #eee;
+        }
+        
+        .team-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .team-icon {
+            font-size: 1.1em;
+        }
+        
+        .team-count {
+            font-size: 0.8em;
+            color: #666;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        
+        .team-leader {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            margin: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+        
+        .special-roles {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            margin: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(78,205,196,0.3);
+        }
+        
+        .role-item {
+            margin: 3px 0;
+            padding: 2px 0;
+            font-size: 0.9em;
+        }
+        
+        .members-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 8px;
+        }
+        
+        .member-card {
+            background: #f8f9fa;
+            padding: 10px 6px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .member-card:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: scale(1.05);
+        }
+        
+        /* 차량 및 숙소 카드 */
+        .vehicle-grid, .accommodation-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .vehicle-card, .accommodation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .vehicle-card {
+            border-left-color: #ff5722;
+        }
+        
+        .accommodation-card {
+            border-left-color: #673ab7;
+        }
+        
+        .vehicle-card:hover, .accommodation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        
+        .vehicle-name, .accommodation-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .vehicle-name {
+            color: #ff5722;
+        }
+        
+        .accommodation-name {
+            color: #673ab7;
+        }
+        
+        .vehicle-members, .accommodation-members {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .room-leader {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 6px;
+            font-size: 0.85em;
+            box-shadow: 0 2px 8px rgba(255,107,107,0.3);
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: linear-gradient(135deg, #37474f 0%, #263238 100%);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>2025 완도 선교</h1>
+            <p>사역팀, 차량, 숙소 안내</p>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-button active" onclick="showPage('teams')">🎯 사역팀</button>
+            <button class="nav-button" onclick="showPage('vehicles')">🚗 차량</button>
+            <button class="nav-button" onclick="showPage('accommodation')">🏠 숙소</button>
+        </div>
+        
+        <!-- 사역팀 페이지 -->
+        <div id="teams" class="page active">
+            <div class="page-title">🎯 사역팀별 구성</div>
+            
+            <div class="search-container">
+                <span class="search-label">이름 검색:</span>
+                <input type="text" class="search-input" id="teamsSearch" placeholder="이름을 입력하세요">
+                <button class="search-button" onclick="searchName('teams')">검색</button>
+            </div>
+            <div class="no-result" id="teamsNoResult">검색 결과가 없습니다.</div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="summary-number">53</div>
+                    <div class="summary-label">확정 인원</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number">6</div>
+                    <div class="summary-label">사역팀</div>
+                </div>
+            </div>
+            
+            <div class="teams-grid">
+                <!-- 미용팀 -->
+                <div class="team-card beauty">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">💄</span>
+                            미용팀
+                        </div>
+                        <div class="team-count">14명</div>
+                    </div>
+                    <div class="team-leader">
+                        👑 팀장: 장훈희
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">권선미</div>
+                        <div class="member-card">김신영</div>
+                        <div class="member-card">김영란</div>
+                        <div class="member-card">박선경</div>
+                        <div class="member-card">서영희</div>
+                        <div class="member-card">오지은</div>
+                        <div class="member-card">윤정숙</div>
+                        <div class="member-card">이예봄</div>
+                        <div class="member-card">이예빈</div>
+                        <div class="member-card">이하람</div>
+                        <div class="member-card">이하민</div>
+                        <div class="member-card">이하온</div>
+                        <div class="member-card">임정미</div>
+                    </div>
+                </div>
+                
+                <!-- 벽화팀 -->
+                <div class="team-card mural">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">🎨</span>
+                            벽화팀
+                        </div>
+                        <div class="team-count">13명</div>
+                    </div>
+                    <div class="team-leader">
+                        👑 팀장: 홍진우
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">김영민</div>
+                        <div class="member-card">배현서</div>
+                        <div class="member-card">서은진</div>
+                        <div class="member-card">오진호</div>
+                        <div class="member-card">윤현근</div>
+                        <div class="member-card">이영기</div>
+                        <div class="member-card">이예성</div>
+                        <div class="member-card">이예온</div>
+                        <div class="member-card">이인숙</div>
+                        <div class="member-card">이지영</div>
+                        <div class="member-card">임호영</div>
+                        <div class="member-card">전윤선</div>
+                    </div>
+                </div>
+                
+                <!-- 시설팀 -->
+                <div class="team-card facility">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">🔧</span>
+                            시설팀
+                        </div>
+                        <div class="team-count">7명</div>
+                    </div>
+                    <div class="team-leader">
+                        👑 팀장: 박용석
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">강대형</div>
+                        <div class="member-card">고정암</div>
+                        <div class="member-card">문남열</div>
+                        <div class="member-card">이성문</div>
+                        <div class="member-card">전중연</div>
+                        <div class="member-card">최금주</div>
+                    </div>
+                </div>
+                
+                <!-- 전도팀 -->
+                <div class="team-card evangelism">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">📖</span>
+                            전도팀
+                        </div>
+                        <div class="team-count">9명</div>
+                    </div>
+                    <div class="team-leader">
+                        👑 팀장: 김명희
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">강태임</div>
+                        <div class="member-card">김인숙</div>
+                        <div class="member-card">설동욱</div>
+                        <div class="member-card">이순우</div>
+                        <div class="member-card">이영남</div>
+                        <div class="member-card">이재인</div>
+                        <div class="member-card">정미경</div>
+                        <div class="member-card">황민숙</div>
+                    </div>
+                </div>
+                
+                <!-- 주방팀 -->
+                <div class="team-card kitchen">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">🍳</span>
+                            주방팀
+                        </div>
+                        <div class="team-count">6명</div>
+                    </div>
+                    <div class="team-leader">
+                        👑 팀장: 이선옥
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">김재민</div>
+                        <div class="member-card">김창욱</div>
+                        <div class="member-card">이영한</div>
+                        <div class="member-card">임명희</div>
+                        <div class="member-card">주현서</div>
+                    </div>
+                </div>
+                
+                <!-- 진행팀 -->
+                <div class="team-card management">
+                    <div class="team-header">
+                        <div class="team-name">
+                            <span class="team-icon">📋</span>
+                            진행팀
+                        </div>
+                        <div class="team-count">4명</div>
+                    </div>
+                    <div class="special-roles">
+                        <div class="role-item">👑 총괄: 전영호</div>
+                        <div class="role-item">💼 총무: 김대현</div>
+                        <div class="role-item">💰 회계: 김진희</div>
+                    </div>
+                    <div class="members-grid">
+                        <div class="member-card">전영호</div>
+                        <div class="member-card">김대현</div>
+                        <div class="member-card">김진희</div>
+                        <div class="member-card">임진희</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 차량 페이지 -->
+        <div id="vehicles" class="page">
+            <div class="page-title">🚗 차량별 배정 현황</div>
+            
+            <div class="search-container">
+                <span class="search-label">이름 검색:</span>
+                <input type="text" class="search-input" id="vehiclesSearch" placeholder="이름을 입력하세요">
+                <button class="search-button" onclick="searchName('vehicles')">검색</button>
+            </div>
+            <div class="no-result" id="vehiclesNoResult">검색 결과가 없습니다.</div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="summary-number">10</div>
+                    <div class="summary-label">개인차량</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number">4</div>
+                    <div class="summary-label">탑차</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number">39</div>
+                    <div class="summary-label">버스</div>
+                </div>
+            </div>
+            
+            <div class="vehicle-grid">
+                <div class="vehicle-card">
+                    <div class="vehicle-name">
+                        <span>🚗</span>
+                        개인차량 (10명)
+                    </div>
+                    <div class="vehicle-members">
+                        김신영, 박선경, 이예봄, 이예빈, 이예성, 이예온, 이하람, 이하민, 이하온, 전중연
+                    </div>
+                </div>
+                
+                <div class="vehicle-card">
+                    <div class="vehicle-name">
+                        <span>🚛</span>
+                        탑차 (4명)
+                    </div>
+                    <div class="vehicle-members">
+                        김대현, 김영민, 이영한, 홍진우
+                    </div>
+                </div>
+                
+                <div class="vehicle-card">
+                    <div class="vehicle-name">
+                        <span>🚌</span>
+                        버스 (39명)
+                    </div>
+                    <div class="vehicle-members">
+                        강대형, 강태임, 고정암, 권선미, 김명희, 김영란, 김인숙, 김재민, 김진희, 김창욱, 문남열, 박용석, 배현서, 서영희, 서은진, 설동욱, 오지은, 오진호, 윤정숙, 윤현근, 이선옥, 이성문, 이순우, 이영기, 이영남, 이인숙, 이재인, 이지영, 임명희, 임정미, 임진희, 임호영, 장훈희, 전영호, 전윤선, 정미경, 주현서, 최금주, 황민숙
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 숙소 페이지 -->
+        <div id="accommodation" class="page">
+            <div class="page-title">🏠 숙소별 배정 현황</div>
+            
+            <div class="search-container">
+                <span class="search-label">이름 검색:</span>
+                <input type="text" class="search-input" id="accommodationSearch" placeholder="이름을 입력하세요">
+                <button class="search-button" onclick="searchName('accommodation')">검색</button>
+            </div>
+            <div class="no-result" id="accommodationNoResult">검색 결과가 없습니다.</div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="summary-number">3</div>
+                    <div class="summary-label">교회</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-number">5</div>
+                    <div class="summary-label">펜션</div>
+                </div>
+                 <div class="summary-item">
+                    <div class="summary-number">1</div>
+                    <div class="summary-label">외부교회</div>
+                </div>
+            </div>
+            
+            <div class="accommodation-grid">
+                <!-- 교회 -->
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏛️</span>
+                        교회1 (5명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 이선옥</span>
+                        김재민, 김진희, 임명희, 주현서
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏛️</span>
+                        교회2 (5명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 전윤선</span>
+                        서은진, 이인숙, 이지영, 임진희
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏛️</span>
+                         교회3 (3명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 이영한</span>
+                         전중연, 김창욱
+                    </div>
+                </div>
+
+                <!-- 펜션 -->
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏡</span>
+                        펜션1 (6명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 장훈희</span>
+                        권선미, 김영란, 서영희, 윤정숙, 임정미
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏡</span>
+                        펜션2 (7명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 김명희</span>
+                        강태임, 김인숙, 이순우, 이재인, 정미경, 황민숙
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏡</span>
+                        펜션3 (6명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 김신영</span>
+                         오지은, 박선경, 이예봄, 이예빈, 이하람
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏡</span>
+                        펜션4 (7명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 김대현</span>
+                         설동욱, 오진호, 윤현근, 이영기, 이영남, 임호영
+                    </div>
+                </div>
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>🏡</span>
+                        펜션5 (8명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 홍진우</span>
+                         김영민, 배현서, 이예성, 이예온, 이하민, 이하온, 버스기사
+                    </div>
+                </div>
+
+                <!-- 외부교회 -->
+                <div class="accommodation-card">
+                    <div class="accommodation-name">
+                        <span>⛪</span>
+                        외부교회 (6명)
+                    </div>
+                    <div class="accommodation-members">
+                        <span class="room-leader">🏠 박용석</span>
+                         강대형, 고정암, 문남열, 이성문, 최금주
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🙏 하나님의 은혜로 함께하는 2025 완도선교 🙏</p>
+        </div>
+    </div>
+
+    <script>
+        // 현재 활성화된 페이지의 원본 내용을 저장하기 위한 객체
+        let originalPageContents = {};
+
+        // 페이지가 로드될 때 각 페이지의 원본 HTML을 저장
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.page').forEach(page => {
+                originalPageContents[page.id] = page.innerHTML;
+            });
+        });
+
+        function showPage(pageId) {
+            // 모든 페이지 비활성화
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            // 모든 네비게이션 버튼 비활성화
+            document.querySelectorAll('.nav-button').forEach(button => button.classList.remove('active'));
+            
+            // 대상 페이지 활성화
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // 대상 네비게이션 버튼 활성화
+            const activeButton = document.querySelector(`.nav-button[onclick="showPage('${pageId}')"]`);
+            if(activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            // 다른 페이지로 이동 시 하이라이트 및 검색 결과 초기화
+            clearHighlightsAndRestore();
+        }
+        
+        function searchName(pageId) {
+            clearHighlightsAndRestore();
+            
+            const searchInput = document.getElementById(pageId + 'Search');
+            const searchTerm = searchInput.value.trim();
+            const noResultDiv = document.getElementById(pageId + 'NoResult');
+            
+            if (!searchTerm) {
+                console.warn('검색어를 입력해주세요.');
+                // alert() 대신 console 경고 사용
+                return;
+            }
+            
+            const page = document.getElementById(pageId);
+            let found = false;
+
+            const elementsToSearch = page.querySelectorAll('.member-card, .team-leader, .role-item, .vehicle-members, .accommodation-members');
+
+            elementsToSearch.forEach(element => {
+                // Node.textContent는 숨겨진 텍스트도 포함하므로 더 정확한 검색 가능
+                if (element.textContent.includes(searchTerm)) {
+                    found = true;
+                    // 검색된 요소를 포함하는 가장 가까운 카드(상위)로 스크롤
+                    const cardToScroll = element.closest('.team-card, .vehicle-card, .accommodation-card');
+                    if(cardToScroll) {
+                        cardToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    // 해당 요소 내의 텍스트 하이라이트
+                    highlightTextInNode(element, searchTerm);
+                }
+            });
+
+            if (found) {
+                noResultDiv.style.display = 'none';
+            } else {
+                noResultDiv.style.display = 'block';
+            }
+        }
+
+        function highlightTextInNode(node, searchTerm) {
+            // 텍스트 노드만 처리
+            if (node.nodeType === 3) {
+                const text = node.nodeValue;
+                const matchIndex = text.toLowerCase().indexOf(searchTerm.toLowerCase());
+
+                if (matchIndex !== -1) {
+                    const span = document.createElement('span');
+                    span.className = 'highlight';
+                    
+                    const beforeText = text.substring(0, matchIndex);
+                    const matchedText = text.substring(matchIndex, matchIndex + searchTerm.length);
+                    const afterText = text.substring(matchIndex + searchTerm.length);
+
+                    const parent = node.parentNode;
+                    // 기존 텍스트 노드 대신, 분리된 텍스트 노드와 하이라이트 span을 삽입
+                    if(beforeText) parent.insertBefore(document.createTextNode(beforeText), node);
+                    span.appendChild(document.createTextNode(matchedText));
+                    parent.insertBefore(span, node);
+                    if(afterText) parent.insertBefore(document.createTextNode(afterText), node);
+                    parent.removeChild(node);
+                }
+            } else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+                // 엘리먼트 노드인 경우, 자식 노드들을 순회하며 재귀 호출
+                Array.from(node.childNodes).forEach(child => {
+                    highlightTextInNode(child, searchTerm);
+                });
+            }
+        }
+        
+        function clearHighlightsAndRestore() {
+            // 현재 활성화된 페이지의 내용을 원본으로 복원
+            const activePage = document.querySelector('.page.active');
+            if (activePage && originalPageContents[activePage.id]) {
+                const pageId = activePage.id;
+                const pageContainer = document.getElementById(pageId);
+                if(pageContainer) {
+                    pageContainer.innerHTML = originalPageContents[pageId];
+                     // 검색 입력 필드에 이벤트 리스너를 다시 연결
+                    const searchInput = pageContainer.querySelector('.search-input');
+                    const searchButton = pageContainer.querySelector('.search-button');
+                    if(searchInput && searchButton){
+                        searchButton.onclick = () => searchName(pageId);
+                    }
+                }
+            }
+        }
+
+        // DOMContentLoaded 이벤트 리스너에서 원본 콘텐츠를 한 번만 저장
+        document.addEventListener('DOMContentLoaded', () => {
+            if (Object.keys(originalPageContents).length === 0) {
+                 document.querySelectorAll('.page').forEach(page => {
+                    originalPageContents[page.id] = page.innerHTML;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
